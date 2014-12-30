@@ -1,0 +1,66 @@
+<configuration>
+
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg %n
+			</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/tmp/spring4demo/spring4demoapp.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>spring4demoapp.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	<appender name="minuteRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover every minute -->
+			<FileNamePattern>/tmp/minutes/spring4demoapp-minute.%d{yyyy-MM-dd_HH-mm}.log
+			</FileNamePattern>
+
+			<!-- keep 30 minutes' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%-4relative [%thread] %-5level %logger - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.spring.example" additivity="true">
+		<level value="DEBUG,INFO,ERROR" />
+
+
+		<appender-ref ref="dailyRollingFileAppender" />
+		<!-- <appender-ref ref="minuteRollingFileAppender"/> -->
+		<appender-ref ref="consoleAppender" />
+	</logger>
+
+
+	<logger name="org.hibernate" level="INFO" />
+
+	<logger name="org.springframework" level="WARN" />
+	<logger name="org.springframework.transaction" level="WARN" />
+
+	<!-- in order to debug some marshalling issues, this needs to be TRACE -->
+	<logger name="org.springframework.web.servlet.mvc" level="WARN" />
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
