@@ -1,7 +1,7 @@
 package com.spring.example.model;
 
 /**
- * Created by insys on 12/29/2014.
+ * @author ajay
  */
 public class Records {
     private long totalNumberOfRecords;
