@@ -56,6 +56,7 @@ public class SimpleUrlAuthenticationSuccessHandler implements AuthenticationSucc
     protected String determineTargetUrl(final Authentication authentication) {
         boolean isUser = false;
         boolean isAdmin = false;
+        boolean isSuperAdmin=false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_AGENT")) {
@@ -64,14 +65,19 @@ public class SimpleUrlAuthenticationSuccessHandler implements AuthenticationSucc
             } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
                 isAdmin = true;
                 break;
+            } else if (grantedAuthority.getAuthority().equals("ROLE_SUPER_ADMIN")) {
+                isSuperAdmin = true;
             }
+
         }
 
         if (isUser) {
             return "/home";
         } else if (isAdmin) {
         	return "/home";
-        }else {
+        } else if(isSuperAdmin){
+            return "/home";
+        } else {
             throw new IllegalStateException();
         }
     }

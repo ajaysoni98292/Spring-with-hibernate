@@ -6,4 +6,5 @@ insert into users values(2,'1','1','1','ajay@gmail.com','1','Ajay','Soni','$2a$1
 
 insert into roles values(1,'ROLE_AGENT','Agent');
 insert into roles values(2,'ROLE_ADMIN','Admin');
+insert into roles values(3,'ROLE_SUPER_ADMIN','Super Admin');
 

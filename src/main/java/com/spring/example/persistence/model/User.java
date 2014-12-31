@@ -70,7 +70,28 @@ public class User implements Serializable, UserDetails {
 	@SelectValueConstraint
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="role_id", referencedColumnName="id")
-	private Role role; 
+	private Role role;
+
+	@Column(name = "city")
+	private String city;
+
+	@Column(name = "address")
+	private String address;
+
+	@Column(name = "state")
+	private String state;
+
+	@Column(name = "country")
+	private String country;
+
+	@Column(name = "mobile_number")
+	private String mobileNumber;
+
+	@Column(name = "phone_number")
+	private String phoneNumber;
+
+	@Column(name = "zip")
+	private String zip;
 	
 	@Column(name = "enabled")
 	private boolean enabled;
@@ -162,6 +183,62 @@ public class User implements Serializable, UserDetails {
 
 	public void setAccountNonLocked(boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
 	}
 
 	@Override

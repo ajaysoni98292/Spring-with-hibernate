@@ -130,7 +130,6 @@ public class UserController {
 		}
 
 		String message = userService.updatePassword(changePassword,ActiveUserUtil.getUser());
-		System.out.println("===message in controller ===="+message);
 		if (message.equals(messageSource.getMessage("password.changed.successfully", null, null))) {
 			redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("password.changed.successfully", null, null));
 		} else {
