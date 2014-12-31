@@ -1,3 +1,8 @@
+/**
+ *
+ * @author ajay
+ */
+
 var COMMAN_METHOD = {
 	isContainsSpecialCharacter : function(inputText){
 		var pattern = new RegExp(REGEX_CONSTANT.SPECIAL_CHARACTERS);

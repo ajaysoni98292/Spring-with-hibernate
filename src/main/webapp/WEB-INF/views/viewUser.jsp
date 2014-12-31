@@ -43,7 +43,7 @@
 </div>
 
 <%@include file="commonJs.jspf" %>
-<script src="/resources/javascript/user.js"></script>
+<script src="/resources/javascript/viewUser.js"></script>
 
 </body>
 </html>

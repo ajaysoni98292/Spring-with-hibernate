@@ -1,5 +1,9 @@
+/**
+ *
+ * @author ajay
+ */
+
 var notification = function() {
-	alert("calling");
 	privateMethod = {
 			displayMessage : function(type, fieldId) {
 
@@ -19,7 +23,6 @@ var notification = function() {
 
 	return {
 		init : function() {
-			alert("inside init")
 			privateMethod.displayMessage("success", "successMessage");
 			privateMethod.displayMessage("error", "errorMessage");
 		}

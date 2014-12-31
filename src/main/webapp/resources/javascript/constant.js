@@ -1,3 +1,8 @@
+/**
+ *
+ * @author ajay
+ */
+
 var URL_CONSTANT = {
 	LIST_PAGINATED_USERS_URL:window.location.protocol+"//"+ window.location.host+"/user/list/view",
 	DELETE_USER_URL:window.location.protocol+"//"+ window.location.host+"/user/delete"
@@ -9,7 +14,8 @@ var MESSAGE_CONSTANT = {
 	MESSAGE_SELECT_ROLE : "Select Role",
 	MESSAGE_SPECIAL_CHARACTER_NOT_ALLOWED : "Special characters not allowed",
 	MESSAGE_ENTER_VALID_EMAIL : "Enter valid email",
-	MESSAGE_PASSWORD_LESS_THAN_SIX_CHARACTERS : "Password should be at least 6 characters long"
+	MESSAGE_PASSWORD_LESS_THAN_SIX_CHARACTERS : "Password should be 6-20 characters long",
+	MESSAGE_SHOULD_BE_SAME : "New password and confirm password should be same"
 };
 
 var TEXT_CONSTANT = {

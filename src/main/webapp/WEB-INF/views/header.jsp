@@ -12,12 +12,12 @@
                     <ul class="dropdown-menu dropdown-menu-margin-top" role="menu">
                         <li>
                             <form action="/logout" method="post">
-                                <input type="submit" class="submitLink" value="Log out"/> <input
-                                    type="hidden" name="${_csrf.parameterName}"
-                                    value="${_csrf.token}"/>
+                                <input type="submit" class="submitLink" value="Log out"/>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </form>
                         </li>
                         <li><a href="/user/list" class="btn btn-link">User Management</a></li>
+                        <li><a href="/user/change-password" class="btn btn-link">Change Password</a></li>
                     </ul>
                 </li>
             </ul>

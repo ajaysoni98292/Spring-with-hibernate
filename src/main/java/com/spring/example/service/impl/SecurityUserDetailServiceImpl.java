@@ -1,71 +1,40 @@
 package com.spring.example.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.spring.example.persistence.model.User;
+import com.spring.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.spring.example.persistence.model.Role;
-import com.spring.example.service.UserService;
-
 @Service
 @Transactional(readOnly = true)
-public class SecurityUserDetailServiceImpl implements UserDetailsService{
+public class SecurityUserDetailServiceImpl implements UserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityUserDetailServiceImpl.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityUserDetailServiceImpl.class);
+	private static User EMPTY = new User();
+
 	@Autowired
-	UserService userService;
-    
-    @SuppressWarnings("unchecked")
-	@Override
-    public UserDetails loadUserByUsername(String username){
-    	try{
-    	logger.info("Login using username : " +username);
-        com.spring.example.persistence.model.User user = userService.getUserById(username);
-	    return new User(  
-	            user.getEmail(),   
-	            user.getPassword(),   
-	            user.isEnabled(),   
-	            user.isAccountNonExpired(),   
-	            user.isCredentialsNonExpired(),   
-	            user.isAccountNonLocked(),  
-	            getAuthorities(user.getRole())  
-	    ); 
-    	}catch(Exception e){
-    		e.printStackTrace();
-    		return  null;
-    	}
-    }
+	private UserService userService;
 
-    @SuppressWarnings("rawtypes")
-    private Collection getAuthorities(Role role) {  
-	    List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));  
-	    return authList;  
+	/* The following method is in built method UserDetailService class and this class
+	 * method loadUserByUserName is overwritten by the author for custom use
+	 * if any exception occurred in the following approach then author not returning the null
+	 * he is returning the empty user because empty user is not harmful
+	 */
+
+	@Override
+	public UserDetails loadUserByUsername(String username){
+		try{
+			LOGGER.info("Login using username : " + username);
+			User user = userService.getUserByEmailId(username);
+			return user;
+		}catch(Exception e){
+			LOGGER.error("Exception occurred in getting the logged in user {}", e);
+			return EMPTY;
+		}
 	}
-    
-    public List<String> getRoles(Role role) {  
-	    List<String> roleList = new ArrayList<String>();  
-	    roleList.add(role.getRole());
-	    return roleList;  
-	}  
-    
-    public static List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {  
-	    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
-	      
-	    for (String role : roles) {  
-	        authorities.add(new SimpleGrantedAuthority(role));  
-	    }  
-	    return authorities;  
-	} 
 }

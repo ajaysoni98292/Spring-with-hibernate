@@ -1,27 +1,22 @@
 package com.spring.example.persistence.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.spring.example.form.validator.EmailExistsConstraint;
 import com.spring.example.form.validator.SelectValueConstraint;
 import com.spring.example.form.validator.SizeConstraint;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -30,7 +25,7 @@ import com.spring.example.form.validator.SizeConstraint;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -89,145 +84,99 @@ public class User implements Serializable{
 	@Column(name = "account_non_locked")
 	private boolean accountNonLocked;
 
-
-	/**
-	 * @return the id
-	 */
 	public long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the role
-	 */
-	public Role getRole() {
-		return role;
-	}
-
-	/**
-	 * @param role the role to set
-	 */
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	/**
-	 * @return the firstName
-	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
-	/**
-	 * @param firstName the firstName to set
-	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-	/**
-	 * @return the lastName
-	 */
 	public String getLastName() {
 		return lastName;
 	}
 
-	/**
-	 * @param lastName the lastName to set
-	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	/**
-	 * @return the email
-	 */
 	public String getEmail() {
 		return email;
 	}
 
-	/**
-	 * @param email the email to set
-	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	/**
-	 * @return the password
-	 */
 	public String getPassword() {
 		return password;
 	}
 
-	/**
-	 * @param password the password to set
-	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	/**
-	 * @return the enabled
-	 */
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
 
-	/**
-	 * @param enabled the enabled to set
-	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	/**
-	 * @return the accountNonExpired
-	 */
 	public boolean isAccountNonExpired() {
 		return accountNonExpired;
 	}
 
-	/**
-	 * @param accountNonExpired the accountNonExpired to set
-	 */
 	public void setAccountNonExpired(boolean accountNonExpired) {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	/**
-	 * @return the credentialsNonExpired
-	 */
 	public boolean isCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
-	/**
-	 * @param credentialsNonExpired the credentialsNonExpired to set
-	 */
 	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	/**
-	 * @return the accountNonLocked
-	 */
 	public boolean isAccountNonLocked() {
 		return accountNonLocked;
 	}
 
-	/**
-	 * @param accountNonLocked the accountNonLocked to set
-	 */
 	public void setAccountNonLocked(boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<String> roleList = new ArrayList<>();
+		roleList.add(role.getRole());
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (String role : roleList) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		return authorities;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
 }

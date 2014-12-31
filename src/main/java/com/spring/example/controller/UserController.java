@@ -1,10 +1,12 @@
 package com.spring.example.controller;
 
+import com.spring.example.model.ChangePassword;
 import com.spring.example.model.Records;
 import com.spring.example.persistence.model.Role;
 import com.spring.example.persistence.model.User;
 import com.spring.example.service.RoleService;
 import com.spring.example.service.UserService;
+import com.spring.example.utils.ActiveUserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,7 +31,7 @@ import java.util.Map;
 @RequestMapping(value = "/user")
 public class UserController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -41,8 +44,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String listUsers(ModelMap users) {
-/*		users.addAttribute("userCount", userService.findRecordsCount());*/
-		return "user";
+		return "viewUser";
 	}
 	
 	@RequestMapping(value = "/list/view", method = RequestMethod.GET)
@@ -53,7 +55,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createUser(ModelMap users,Locale locale) {
+	public String createUser(ModelMap users) {
 		/*Added condition because when there is error in data while post request in createUser()
 		* we added the user object received in createUser() bindingResult.hasErrors() 
 		* and redirected to this method and it was overriding that attribute so error messages were 
@@ -62,7 +64,6 @@ public class UserController {
 		if (!users.containsAttribute("user")) {
 			users.addAttribute("user", new User());
 		}
-		
 		users.addAttribute("role", new Role());
 		Map<String,String> roleMap = roleService.getAllRole();
 		users.addAttribute("roleMap", roleMap);
@@ -99,8 +100,43 @@ public class UserController {
 		return "editUser";
 	}
 	
-	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateUser() {
 		return "redirect:/user/contact";
 	}
+
+	@RequestMapping(value = "/change-password", method = RequestMethod.GET)
+	public String changePassword(ModelMap changePassword) {
+
+		/*Added condition because when there is error in data while post request in changePassword()
+		* we added the user object received in changePassword() bindingResult.hasErrors()
+		* and redirected to this method and it was overriding that attribute so error messages were
+		* not displayed on jsp page.
+		*/
+		if (!changePassword.containsAttribute("changePassword")) {
+			changePassword.addAttribute("changePassword", new ChangePassword());
+		}
+		return "changePassword";
+	}
+	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+	public String redirectChangePassword(@Valid @ModelAttribute("changePassword") ChangePassword changePassword,
+										 BindingResult bindingResult,RedirectAttributes redirectAttributes,Principal principal) {
+
+		if (bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.changePassword", bindingResult);
+			redirectAttributes.addFlashAttribute("errorMessage", messageSource.getMessage("password.change.is.unsuccessful", null, null));
+			redirectAttributes.addFlashAttribute("changePassword", changePassword);
+			return "redirect:/user/change-password";
+		}
+
+		String message = userService.updatePassword(changePassword,ActiveUserUtil.getUser());
+		System.out.println("===message in controller ===="+message);
+		if (message.equals(messageSource.getMessage("password.changed.successfully", null, null))) {
+			redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("password.changed.successfully", null, null));
+		} else {
+			redirectAttributes.addFlashAttribute("errorMessage", messageSource.getMessage("old.password.is.incorrect", null, null));
+		}
+		return "redirect:/user/change-password";
+	}
+
 }

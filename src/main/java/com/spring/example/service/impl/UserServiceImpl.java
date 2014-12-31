@@ -2,8 +2,10 @@ package com.spring.example.service.impl;
 
 import java.util.List;
 
+import com.spring.example.model.ChangePassword;
 import com.spring.example.model.Records;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private UserDao dao;
 	
 	@Autowired
-	PasswordEncoder passwordEncoder; 
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private ReloadableResourceBundleMessageSource messageSource;
 
     public UserServiceImpl() {
         super();
@@ -43,7 +48,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
 	}
 	
 	@Override
-	public User getUserById(String id) {
+	public User getUserByEmailId(String id) {
 		List<User> list = dao.getUserById(id);
 		if(list != null && list.size() > 0){
 			return list.get(0);
@@ -58,5 +63,27 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
 		user.setCredentialsNonExpired(true);
 		user.setEnabled(true);
 		return user;
+	}
+
+	@Override
+	public String updatePassword(ChangePassword changePassword,User activeUser) {
+
+		String oldPassword = changePassword.getOldPassword();
+		String newPassword = changePassword.getNewPassword();
+		String confirmPassword = changePassword.getConfirmPassword();
+
+		boolean isOldPasswordCorrect = passwordEncoder.matches(oldPassword,
+				getUserByEmailId(activeUser.getEmail()).getPassword());
+		if (isOldPasswordCorrect) {
+			if (newPassword.equals(confirmPassword)) {
+				activeUser.setPassword(passwordEncoder.encode(newPassword));
+				update(activeUser);
+				return messageSource.getMessage("password.changed.successfully", null, null);
+			} else {
+				return messageSource.getMessage("new.password.and.confirm.password.should.be.same",null, null);
+			}
+		} else {
+			return messageSource.getMessage("old.password.is.incorrect", null,null);
+		}
 	}
 }

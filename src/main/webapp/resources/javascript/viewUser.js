@@ -1,3 +1,8 @@
+/**
+ *
+ * @author ajay
+ */
+
 $(document).ready(function () {
     var userObject = new user();
     userObject.init();

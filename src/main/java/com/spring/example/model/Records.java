@@ -1,6 +1,7 @@
 package com.spring.example.model;
 
 /**
+ *
  * @author ajay
  */
 public class Records {

@@ -29,7 +29,7 @@ public class EmailExistsConstraintValidator implements ConstraintValidator<Email
 		try {
 			if(target != null && target.length() > 0){
 				if(userService != null){
-					User user = userService.getUserById(target);
+					User user = userService.getUserByEmailId(target);
 					if (user != null) {
 						return false;
 					}
