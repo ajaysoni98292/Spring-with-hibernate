@@ -11,6 +11,7 @@ import com.spring.example.persistence.model.User;
  */
 
 public interface UserService extends IOperations<User>{
+
 	Records listPaginatedUsers(int startIndex , int numberOfRecordsToFetch);
 	User getUserByEmailId(String id);
 	User setUserAccountAccessControl(User user);

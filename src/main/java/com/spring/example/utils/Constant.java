@@ -16,4 +16,5 @@ public class Constant {
 	public static final String PERSISTENCE_PACKAGE 								= "com.spring.example.persistence";
 	public static final String MESSAGES_PROPERTIES_FILE_BASE_NAME 				= "messages";
 	public static final String VALIDATION_MESSAGES_PROPERTIES_FILE_BASE_NAME 	= "validationMessages";
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 }

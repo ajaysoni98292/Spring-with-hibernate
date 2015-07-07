@@ -7,6 +7,7 @@ import com.spring.example.persistence.model.User;
 import com.spring.example.service.RoleService;
 import com.spring.example.service.UserService;
 import com.spring.example.utils.ActiveUserUtil;
+import com.spring.example.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,7 @@ public class UserController {
 		user.setEmail(user.getEmail().trim());
 		user.setFirstName(user.getFirstName().trim());
 		user.setLastName(user.getLastName().trim());
+		user.setCreatedOn(DateUtils.getCurrentTime());
 		userService.create(user);
 		redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("user.added.successfully", null,locale));
 		return "redirect:/user/create";

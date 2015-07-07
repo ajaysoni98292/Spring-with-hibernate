@@ -84,6 +84,9 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "account_non_locked")
 	private boolean accountNonLocked;
 
+	@Column(name = "created_on")
+	private String createdOn;
+
 	public long getId() {
 		return id;
 	}
@@ -162,6 +165,14 @@ public class User implements Serializable, UserDetails {
 
 	public void setAccountNonLocked(boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
+	}
+
+	public String getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(String createdOn) {
+		this.createdOn = createdOn;
 	}
 
 	@Override
